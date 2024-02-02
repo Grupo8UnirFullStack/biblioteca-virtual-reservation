@@ -6,11 +6,7 @@ import com.unir.ms.reserva.unirmsreserva.service.ReservationsService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,10 +24,10 @@ public class ReservationsController {
 
     @PostMapping("/reservations")
     //Uso de jakarta api validation dependency
-    public ResponseEntity<Reservation> createReservation(@RequestBody @Valid ReservationRequest request) {
+    public ResponseEntity<ResponseEntity<?>> createReservation(@RequestBody @Valid ReservationRequest request) {
 
         log.info("Generando reserva de libros...");
-        Reservation created = service.createReservation(request);
+        ResponseEntity<?> created = service.createReservation(request);
 
         if (created != null) {
             return ResponseEntity.ok(created);
