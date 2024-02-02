@@ -28,6 +28,8 @@ public class ReservationsServicelmpl implements ReservationsService {
     @Override
     public ResponseEntity<?> createReservation(ReservationRequest request) {
         List<Book> books = request.getBooks().stream().map(booksFacade::getBook).filter(Objects::nonNull).toList();
+        //List<Book> reservationdate = request.getReservationdate().map(booksFacade::getBook).filter(Objects::nonNull).toList();
+
 
 
         if (books.size() != request.getBooks().size()) {
@@ -39,7 +41,10 @@ public class ReservationsServicelmpl implements ReservationsService {
             log.info("No se encuentran existencias del libro", books.size(), request.getBooks().size());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: el libro que desea reservar: '" + (bookWithoutStock != null ? bookWithoutStock.getTitle() : "")  + "' no se encuentra en existencia.");
         } else {
-            Reservation reservation = Reservation.builder().books(books.stream().map(Book::getId).collect(Collectors.toList())).build();
+            Reservation reservation = Reservation.builder()
+                    .books(books.stream().map(Book::getId).collect(Collectors.toList()))
+                    .reservationdate(request.getReservationdate())
+                    .build();
             repository.save(reservation);
             return ResponseEntity.status(HttpStatus.CREATED).body("Se ha realizado con éxito la reserva");
         }

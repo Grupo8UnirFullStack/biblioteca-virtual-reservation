@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -14,6 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReservationRequest {
+
+	@NotNull(message = "Fecha de reserva no puede ser nulo`")
+	@NotEmpty(message = "Fecha de reserva no puede estar vacio")
+	private Date reservationdate;
 
 	@NotNull(message = "`libros no puede ser nulo`")
 	@NotEmpty(message = "`libros` no puede estar vacio")

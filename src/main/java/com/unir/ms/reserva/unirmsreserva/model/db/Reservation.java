@@ -3,7 +3,7 @@ package com.unir.ms.reserva.unirmsreserva.model.db;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Entity
