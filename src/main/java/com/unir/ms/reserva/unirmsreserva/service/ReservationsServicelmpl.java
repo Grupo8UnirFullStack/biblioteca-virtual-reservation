@@ -1,9 +1,13 @@
 package com.unir.ms.reserva.unirmsreserva.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unir.ms.reserva.unirmsreserva.data.ReservationJpaRepository;
 import com.unir.ms.reserva.unirmsreserva.facade.BooksFacade;
 import com.unir.ms.reserva.unirmsreserva.model.Book;
 import com.unir.ms.reserva.unirmsreserva.model.db.Reservation;
+import com.unir.ms.reserva.unirmsreserva.model.db.ReservationDTO;
 import com.unir.ms.reserva.unirmsreserva.model.request.ReservationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +29,10 @@ public class ReservationsServicelmpl implements ReservationsService {
     @Autowired
     private ReservationJpaRepository repository;
 
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Override
     public ResponseEntity<?> createReservation(ReservationRequest request) {
         List<Book> books = request.getBooks().stream().map(booksFacade::getBook).filter(Objects::nonNull).toList();
@@ -36,7 +44,7 @@ public class ReservationsServicelmpl implements ReservationsService {
         } else if (books.stream().anyMatch(book -> book.getStock() == 0)) {
             Book bookWithoutStock = books.stream().filter(book -> book.getStock() == 0).findFirst().orElse(null);
             log.info("No se encuentran existencias del libro", books.size(), request.getBooks().size());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: el libro que desea reservar: '" + (bookWithoutStock != null ? bookWithoutStock.getTitle() : "")  + "' no se encuentra en existencia.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: el libro que desea reservar: '" + (bookWithoutStock != null ? bookWithoutStock.getTitle() : "") + "' no se encuentra en existencia.");
         } else {
             Reservation reservation = Reservation.builder()
                     .books(books.stream().map(Book::getId).collect(Collectors.toList()))
@@ -46,7 +54,6 @@ public class ReservationsServicelmpl implements ReservationsService {
             return ResponseEntity.status(HttpStatus.CREATED).body("Se ha realizado con éxito la reserva");
         }
     }
-
 
 
     @Override
@@ -59,4 +66,24 @@ public class ReservationsServicelmpl implements ReservationsService {
         List<Reservation> reservations = repository.findAll();
         return reservations.isEmpty() ? null : reservations;
     }
+
+    @Override
+    public Reservation updateReservation(String id, ReservationDTO updateRequest) {
+        Reservation reservation = repository.getReferenceById(Long.valueOf(id));
+        if (reservation != null) {
+            reservation.update(updateRequest);
+            repository.save(reservation);
+            return reservation;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Reservation updateReservation(String id, String updateRequest) {
+        return null;
+    }
+
+
+
 }

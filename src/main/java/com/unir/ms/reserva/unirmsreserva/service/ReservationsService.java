@@ -1,6 +1,7 @@
 package com.unir.ms.reserva.unirmsreserva.service;
 
 import com.unir.ms.reserva.unirmsreserva.model.db.Reservation;
+import com.unir.ms.reserva.unirmsreserva.model.db.ReservationDTO;
 import com.unir.ms.reserva.unirmsreserva.model.request.ReservationRequest;
 import org.springframework.http.ResponseEntity;
 
@@ -12,5 +13,9 @@ public interface ReservationsService {
     Reservation getReservation(String id);
 
     List<Reservation> getReservations();
+
+    Reservation updateReservation(String id, ReservationDTO updateRequest);
+    Reservation updateReservation(String id, String updateRequest);
+
 
 }

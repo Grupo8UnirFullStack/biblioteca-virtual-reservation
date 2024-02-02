@@ -1,5 +1,6 @@
 package com.unir.ms.reserva.unirmsreserva.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Reservation {
 
     @Id
@@ -21,9 +23,15 @@ public class Reservation {
     private Long id;
 
     @Column(name = "reservationdate")
-    private Date reservationdate;
+    private String reservationdate;
 
     @ElementCollection
     @Column(name = "books")
     private List<Long> books;
+
+    public void update(ReservationDTO reservationDto) {
+        this.reservationdate = reservationDto.getReservationdate();
+    }
+
+
 }
