@@ -28,9 +28,6 @@ public class ReservationsServicelmpl implements ReservationsService {
     @Override
     public ResponseEntity<?> createReservation(ReservationRequest request) {
         List<Book> books = request.getBooks().stream().map(booksFacade::getBook).filter(Objects::nonNull).toList();
-        //List<Book> reservationdate = request.getReservationdate().map(booksFacade::getBook).filter(Objects::nonNull).toList();
-
-
 
         if (books.size() != request.getBooks().size()) {
             log.info("El libro no se encuentra en el listado", books.size(), request.getBooks().size());

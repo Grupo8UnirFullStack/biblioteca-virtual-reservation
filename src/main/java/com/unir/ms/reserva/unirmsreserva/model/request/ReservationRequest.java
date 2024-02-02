@@ -16,8 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ReservationRequest {
 
-	@NotNull(message = "Fecha de reserva no puede ser nulo`")
-	@NotEmpty(message = "Fecha de reserva no puede estar vacio")
 	private Date reservationdate;
 
 	@NotNull(message = "`libros no puede ser nulo`")
